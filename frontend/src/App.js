@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
 
+
 function App() {
   const [session, setSession] = useState(null);
   const [email, setEmail] = useState("");
@@ -34,29 +35,59 @@ function App() {
   };
 
   // -------- RESUME PARSER --------
+  // const handleSubmit = async () => {
+  //   const response = await fetch("https://resume-parser-backend-t1g0.onrender.com/parse", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       resume: resume,
+  //       job_description: jobDesc,
+  //     }),
+  //   });
+
+  //   const data = await response.json();
+  //   setResult(data);
+
+  //   // save result to Supabase DB
+  //   await supabase.from("parsed_results").insert([
+  //     {
+  //       user_email: session.user.email,
+  //       skills: data.skills_found.join(", "),
+  //       experience: data.experience,
+  //       match_percentage: data.match_percentage,
+  //     },
+  //   ]);
+  // };
+
   const handleSubmit = async () => {
-    const response = await fetch("http://127.0.0.1:5000/parse", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        resume: resume,
-        job_description: jobDesc,
-      }),
-    });
+  console.log("Parse button clicked");
+
+  try {
+    const response = await fetch(
+      "https://resume-parser-backend-t1g0.onrender.com/parse",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resume: resume,
+          job_description: jobDesc,
+        }),
+      }
+    );
+
+    console.log("Response received:", response);
 
     const data = await response.json();
-    setResult(data);
+    console.log("Parsed data:", data);
 
-    // save result to Supabase DB
-    await supabase.from("parsed_results").insert([
-      {
-        user_email: session.user.email,
-        skills: data.skills_found.join(", "),
-        experience: data.experience,
-        match_percentage: data.match_percentage,
-      },
-    ]);
-  };
+    setResult(data);
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+};
+
 
   // -------- UI --------
   if (!session) {
