@@ -2,11 +2,22 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import re
 
-from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 
 import nltk
 import os
+
+STOPWORDS = {
+    "i","me","my","myself","we","our","ours","you","your","yours",
+    "he","him","his","she","her","it","its","they","them","their",
+    "what","which","who","this","that","am","is","are","was","were",
+    "be","been","being","have","has","had","do","does","did",
+    "a","an","the","and","but","if","or","because","as","until",
+    "while","of","at","by","for","with","about","against","between",
+    "into","through","during","before","after","above","below",
+    "to","from","up","down","in","out","on","off","over","under"
+}
+
 
 NLTK_DATA_DIR = "/tmp/nltk_data"
 os.makedirs(NLTK_DATA_DIR, exist_ok=True)
@@ -35,8 +46,7 @@ def preprocess_text(text):
 
     tokens = text.split()
 
-    stop_words = set(stopwords.words('english'))
-    tokens = [w for w in tokens if w not in stop_words]
+    tokens = [w for w in tokens if w not in STOPWORDS]
 
     stemmer = PorterStemmer()
     tokens = [stemmer.stem(w) for w in tokens]
