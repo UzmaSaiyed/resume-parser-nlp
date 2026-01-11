@@ -61,3 +61,6 @@ This project is an NLP-based Resume Parser developed to help Human Resource Mana
 ### Backend
 ```bash
 python app.py
+
+
+#Frontend deployed on Vercel.
