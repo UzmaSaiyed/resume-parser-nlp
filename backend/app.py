@@ -1,31 +1,23 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import re
-import nltk
 
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 
+import nltk
 import os
 
-NLTK_DATA_DIR = os.path.join(os.getcwd(), "nltk_data")
+NLTK_DATA_DIR = "/tmp/nltk_data"
 os.makedirs(NLTK_DATA_DIR, exist_ok=True)
 nltk.data.path.append(NLTK_DATA_DIR)
 
-try:
-    nltk.data.find("corpora/stopwords")
-except LookupError:
-    nltk.download("stopwords", download_dir=NLTK_DATA_DIR)
+for resource in ["stopwords", "wordnet", "omw-1.4"]:
+    try:
+        nltk.data.find(f"corpora/{resource}")
+    except LookupError:
+        nltk.download(resource, download_dir=NLTK_DATA_DIR)
 
-try:
-    nltk.data.find("corpora/wordnet")
-except LookupError:
-    nltk.download("wordnet", download_dir=NLTK_DATA_DIR)
-
-try:
-    nltk.data.find("corpora/omw-1.4")
-except LookupError:
-    nltk.download("omw-1.4", download_dir=NLTK_DATA_DIR)
 
 
 # -----------------------------
