@@ -57,6 +57,18 @@ function App() {
     if (error) alert(error.message);
   };
 
+  // ---------------- GOOGLE LOGIN ----------------
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+
+    if (error) {
+      alert(error.message);
+    }
+  };
+
+
   // ---------------- LOGOUT ----------------
   const handleLogout = async () => {
     await supabase.auth.signOut();
