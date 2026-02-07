@@ -133,6 +133,22 @@ function App() {
             ? "Already have an account? Login"
             : "New user? Sign Up"}
         </button>
+        {/* Google Login Button */}
+        <button
+          onClick={handleGoogleLogin}
+          style={{
+            marginTop: "10px",
+            backgroundColor: "#4285F4",
+            color: "white",
+            padding: "10px",
+            border: "none",
+            cursor: "pointer",
+            width: "100%",
+          }}
+        >
+          Continue with Google
+        </button>
+
       </div>
     );
   }
