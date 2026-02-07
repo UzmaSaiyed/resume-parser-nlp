@@ -7,37 +7,54 @@ function App() {
   // auth
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignup, setIsSignup] = useState(false);
+  const [isSignup, setIsSignup] = useState(true); // SIGNUP FIRST
 
   // resume parser
   const [resume, setResume] = useState("");
   const [jobDesc, setJobDesc] = useState("");
   const [result, setResult] = useState(null);
 
-  // ---------------- AUTH SESSION ----------------
+  // ---------------- SESSION ----------------
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
+    const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
       }
     );
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   // ---------------- SIGN UP ----------------
   const handleSignup = async () => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
 
-    if (error) alert(error.message);
-    else alert("Signup successful. You can now login.");
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    // insert into users table
+    if (data.user) {
+      await supabase.from("users").insert([
+        {
+          id: data.user.id,
+          email: data.user.email,
+        },
+      ]);
+    }
+
+    alert("Signup successful! Please login.");
+    setIsSignup(false);
   };
 
   // ---------------- LOGIN ----------------
@@ -89,14 +106,16 @@ function App() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        /><br /><br />
+        />
+        <br /><br />
 
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        /><br /><br />
+        />
+        <br /><br />
 
         {isSignup ? (
           <button onClick={handleSignup}>Create Account</button>
@@ -107,17 +126,19 @@ function App() {
         <br /><br />
 
         <button onClick={() => setIsSignup(!isSignup)}>
-          {isSignup ? "Already have an account? Login" : "New user? Sign Up"}
+          {isSignup
+            ? "Already have an account? Login"
+            : "New user? Sign Up"}
         </button>
       </div>
     );
   }
 
-  // ---------------- MAIN APP UI ----------------
+  // ---------------- MAIN APP ----------------
   return (
     <div style={{ padding: "30px" }}>
       <h2>Resume Parser</h2>
-      <p>Logged in as: <b>{session.user.email}</b></p>
+      <p>Logged in as <b>{session.user.email}</b></p>
       <button onClick={handleLogout}>Logout</button>
 
       <br /><br />
