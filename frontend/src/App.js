@@ -99,7 +99,9 @@ function App() {
   // ---------------- AUTH UI ----------------
   if (!session) {
     return (
+      
       <div style={{ padding: "40px", maxWidth: "400px" }}>
+        <h3 style={{ color: "red" }}>SIGNUP DEBUG ACTIVE</h3>
         <h2>{isSignup ? "Sign Up" : "Login"}</h2>
 
         <input
