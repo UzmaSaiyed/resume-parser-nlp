@@ -43,16 +43,6 @@ function App() {
       return;
     }
 
-    // insert into users table
-    if (data.user) {
-      await supabase.from("users").insert([
-        {
-          id: data.user.id,
-          email: data.user.email,
-        },
-      ]);
-    }
-
     alert("Signup successful! Please login.");
     setIsSignup(false);
   };
@@ -101,7 +91,6 @@ function App() {
     return (
       
       <div style={{ padding: "40px", maxWidth: "400px" }}>
-        <h3 style={{ color: "red" }}>SIGNUP DEBUG ACTIVE</h3>
         <h2>{isSignup ? "Sign Up" : "Login"}</h2>
 
         <input
