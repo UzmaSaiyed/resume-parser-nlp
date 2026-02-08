@@ -212,6 +212,23 @@ function App() {
                   ? "Already have an account? Login"
                   : "New user? Create an account"}
               </button>
+              <hr style={{ margin: "25px 0" }} />
+
+              <button
+                onClick={handleGoogleLogin}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  background: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+              >
+                Continue with Google
+              </button>
+
             </div>
           </div>
         </div>
