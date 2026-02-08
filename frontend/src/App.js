@@ -154,47 +154,132 @@ function App() {
   }
 
   // ---------------- MAIN APP ----------------
-  return (
-    <div style={{ padding: "30px" }}>
-      <h2>Resume Parser</h2>
-      <p>Logged in as <b>{session.user.email}</b></p>
-      <button onClick={handleLogout}>Logout</button>
+  // ---------------- MAIN APP ----------------
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #667eea, #764ba2)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px",
+        }}
+      >
+        <div
+          style={{
+            background: "#ffffff",
+            width: "100%",
+            maxWidth: "900px",
+            borderRadius: "12px",
+            padding: "30px",
+            boxShadow: "0 15px 40px rgba(0,0,0,0.2)",
+          }}
+        >
+          {/* Header */}
+          <div style={{ marginBottom: "20px" }}>
+            <h2 style={{ margin: 0 }}>Resume Parser</h2>
+            <p style={{ color: "#555" }}>
+              Logged in as <b>{session.user.email}</b>
+            </p>
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "#e53e3e",
+                color: "white",
+                border: "none",
+                padding: "8px 14px",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              Logout
+            </button>
+          </div>
 
-      <br /><br />
+          <hr />
 
-      <textarea
-        rows="6"
-        cols="70"
-        placeholder="Paste Resume Text"
-        value={resume}
-        onChange={(e) => setResume(e.target.value)}
-      />
+          {/* Resume Input */}
+          <div style={{ marginTop: "20px" }}>
+            <h3>📄 Resume Text</h3>
+            <textarea
+              rows="6"
+              placeholder="Paste the candidate's resume text here..."
+              value={resume}
+              onChange={(e) => setResume(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                resize: "vertical",
+              }}
+            />
+          </div>
 
-      <br /><br />
+          {/* Job Description */}
+          <div style={{ marginTop: "20px" }}>
+            <h3>🧾 Job Description / Keywords</h3>
+            <textarea
+              rows="4"
+              placeholder="Paste job description or required skills..."
+              value={jobDesc}
+              onChange={(e) => setJobDesc(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                resize: "vertical",
+              }}
+            />
+          </div>
 
-      <textarea
-        rows="4"
-        cols="70"
-        placeholder="Paste Job Description or Keywords"
-        value={jobDesc}
-        onChange={(e) => setJobDesc(e.target.value)}
-      />
+          {/* Action Button */}
+          <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <button
+              onClick={handleSubmit}
+              style={{
+                background: "#667eea",
+                color: "white",
+                padding: "12px 30px",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              🔍 Parse Resume
+            </button>
+          </div>
 
-      <br /><br />
-
-      <button onClick={handleSubmit}>Parse Resume</button>
-
-      <br /><br />
-
-      {result && (
-        <div>
-          <h3>Result</h3>
-          <p><b>Skills:</b> {result.skills_found.join(", ")}</p>
-          <p><b>Match %:</b> {result.match_percentage}</p>
+          {/* Result Section */}
+          {result && (
+            <div
+              style={{
+                marginTop: "30px",
+                padding: "20px",
+                background: "#f7fafc",
+                borderRadius: "10px",
+              }}
+            >
+              <h3>📊 Parsing Result</h3>
+              <p>
+                <b>Skills Found:</b>{" "}
+                {result.skills_found.length > 0
+                  ? result.skills_found.join(", ")
+                  : "No matching skills found"}
+              </p>
+              <p>
+                <b>Match Percentage:</b> {result.match_percentage}%
+              </p>
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+    
+
 }
 
 export default App;
