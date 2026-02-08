@@ -98,62 +98,126 @@ function App() {
     }
   };
 
-  // ---------------- AUTH UI ----------------
-  if (!session) {
-    return (
-      
-      <div style={{ padding: "40px", maxWidth: "400px" }}>
-        <h2>{isSignup ? "Sign Up" : "Login"}</h2>
-
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br /><br />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br /><br />
-
-        {isSignup ? (
-          <button onClick={handleSignup}>Create Account</button>
-        ) : (
-          <button onClick={handleLogin}>Login</button>
-        )}
-
-        <br /><br />
-
-        <button onClick={() => setIsSignup(!isSignup)}>
-          {isSignup
-            ? "Already have an account? Login"
-            : "New user? Sign Up"}
-        </button>
-        {/* Google Login Button */}
-        <button
-          onClick={handleGoogleLogin}
+ // ---------------- AUTH UI ----------------
+    if (!session) {
+      return (
+        <div
           style={{
-            marginTop: "10px",
-            backgroundColor: "#4285F4",
-            color: "white",
-            padding: "10px",
-            border: "none",
-            cursor: "pointer",
-            width: "100%",
+            minHeight: "100vh",
+            background: "linear-gradient(135deg, #667eea, #764ba2)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "20px",
           }}
         >
-          Continue with Google
-        </button>
+          <div
+            style={{
+              background: "#ffffff",
+              width: "100%",
+              maxWidth: "420px",
+              padding: "35px",
+              borderRadius: "12px",
+              boxShadow: "0 15px 40px rgba(0,0,0,0.25)",
+            }}
+          >
+            <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
+              Resume Parser
+            </h2>
 
-      </div>
-    );
-  }
+            <p style={{ textAlign: "center", color: "#666", marginBottom: "25px" }}>
+              {isSignup
+                ? "Create your HR account"
+                : "Login to continue"}
+            </p>
 
-  // ---------------- MAIN APP ----------------
+            {/* Email */}
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "12px",
+                marginBottom: "15px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+              }}
+            />
+
+            {/* Password */}
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "12px",
+                marginBottom: "20px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+              }}
+            />
+
+            {/* Action Button */}
+            {isSignup ? (
+              <button
+                onClick={handleSignup}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  background: "#667eea",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                Create Account
+              </button>
+            ) : (
+              <button
+                onClick={handleLogin}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  background: "#667eea",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                Login
+              </button>
+            )}
+
+            {/* Toggle */}
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <button
+                onClick={() => setIsSignup(!isSignup)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#667eea",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+              >
+                {isSignup
+                  ? "Already have an account? Login"
+                  : "New user? Create an account"}
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
   // ---------------- MAIN APP ----------------
     return (
       <div
@@ -278,7 +342,7 @@ function App() {
         </div>
       </div>
     );
-    
+
 
 }
 
