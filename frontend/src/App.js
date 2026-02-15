@@ -15,7 +15,7 @@ function App() {
 
   // resume parser
   const [resume, setResume] = useState("");
-  const [resumeFile, setResumeFile] = useState(null);   // ⭐ NEW
+  const [resumeFile, setResumeFile] = useState(null);
   const [jobDesc, setJobDesc] = useState("");
   const [result, setResult] = useState(null);
 
@@ -31,19 +31,13 @@ function App() {
       }
     );
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    return () => authListener.subscription.unsubscribe();
   }, []);
 
   // ---------------- SIGN UP ----------------
   const handleSignup = async () => {
     const { error } = await supabase.auth.signUp({ email, password });
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
+    if (error) return alert(error.message);
 
     alert("Signup successful! Please login.");
     setIsSignup(false);
@@ -51,18 +45,13 @@ function App() {
 
   // ---------------- LOGIN ----------------
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) alert(error.message);
   };
 
   // ---------------- GOOGLE LOGIN ----------------
   const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
     if (error) alert(error.message);
   };
 
@@ -75,10 +64,8 @@ function App() {
   // ---------------- RESUME PARSER ----------------
   const handleSubmit = async () => {
     try {
-
       let response;
 
-      // ⭐ IF FILE SELECTED → SEND FILE
       if (resumeFile) {
         const formData = new FormData();
         formData.append("resume_file", resumeFile);
@@ -86,15 +73,9 @@ function App() {
 
         response = await fetch(
           "https://resume-parser-backend-t1g0.onrender.com/parse",
-          {
-            method: "POST",
-            body: formData,
-          }
+          { method: "POST", body: formData }
         );
-      }
-
-      // ⭐ ELSE SEND TEXT
-      else {
+      } else {
         response = await fetch(
           "https://resume-parser-backend-t1g0.onrender.com/parse",
           {
@@ -117,29 +98,60 @@ function App() {
     }
   };
 
+  // ⭐ COMMON PAGE STYLE
+  const pageStyle = {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg,#667eea,#764ba2)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "20px"
+  };
+
+  const cardStyle = {
+    background: "#fff",
+    width: "100%",
+    maxWidth: "800px",
+    padding: "30px",
+    borderRadius: "14px",
+    boxShadow: "0 15px 40px rgba(0,0,0,0.25)"
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "12px",
+    marginBottom: "15px",
+    borderRadius: "8px",
+    border: "1px solid #ccc"
+  };
+
+  const buttonStyle = {
+    width: "100%",
+    padding: "12px",
+    background: "#667eea",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "15px",
+    cursor: "pointer",
+    marginBottom: "10px"
+  };
+
   // ---------------- AUTH UI ----------------
   if (!session) {
     return (
-      <div style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea, #764ba2)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-        <div style={{
-          background: "white",
-          padding: "30px",
-          borderRadius: "12px",
-          width: "350px"
-        }}>
-          <h2>{isSignup ? "Sign Up" : "Login"}</h2>
+      <div style={pageStyle}>
+        <div style={{...cardStyle, maxWidth:"400px"}}>
+          <h2 style={{textAlign:"center"}}>Resume Parser</h2>
+          <p style={{textAlign:"center", color:"#666"}}>
+            {isSignup ? "Create account" : "Login to continue"}
+          </p>
 
           <input
             placeholder="Email"
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
-            style={{width:"100%", padding:"10px", marginBottom:"10px"}}
+            style={inputStyle}
           />
 
           <input
@@ -147,24 +159,28 @@ function App() {
             placeholder="Password"
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
-            style={{width:"100%", padding:"10px", marginBottom:"10px"}}
+            style={inputStyle}
           />
 
-          {isSignup ?
-            <button onClick={handleSignup}>Create Account</button>
-            :
-            <button onClick={handleLogin}>Login</button>
+          {isSignup
+            ? <button style={buttonStyle} onClick={handleSignup}>Create Account</button>
+            : <button style={buttonStyle} onClick={handleLogin}>Login</button>
           }
 
-          <br/><br/>
-
-          <button onClick={()=>setIsSignup(!isSignup)}>
-            {isSignup ? "Already have account? Login" : "New user? Sign Up"}
+          <button
+            style={{...buttonStyle, background:"#444"}}
+            onClick={()=>setIsSignup(!isSignup)}
+          >
+            {isSignup ? "Already have account? Login"
+                      : "New user? Sign Up"}
           </button>
 
           <hr/>
 
-          <button onClick={handleGoogleLogin}>
+          <button
+            style={{...buttonStyle, background:"#fff", color:"#333", border:"1px solid #ccc"}}
+            onClick={handleGoogleLogin}
+          >
             Continue with Google
           </button>
         </div>
@@ -174,51 +190,60 @@ function App() {
 
   // ---------------- MAIN APP ----------------
   return (
-    <div style={{padding:"30px"}}>
-      <h2>Resume Parser</h2>
-      <p>Logged in as {session.user.email}</p>
-      <button onClick={handleLogout}>Logout</button>
+    <div style={pageStyle}>
+      <div style={cardStyle}>
+        <h2>Resume Parser</h2>
+        <p style={{color:"#555"}}>
+          Logged in as <b>{session.user.email}</b>
+        </p>
+        <button style={{...buttonStyle, background:"#e53e3e", width:"120px"}}
+          onClick={handleLogout}>
+          Logout
+        </button>
 
-      <hr/>
+        <hr/>
 
-      {/* TEXT OPTION */}
-      <h3>Paste Resume Text</h3>
-      <textarea
-        rows="5"
-        value={resume}
-        onChange={(e)=>setResume(e.target.value)}
-        style={{width:"100%", marginBottom:"10px"}}
-      />
+        <h3>📄 Paste Resume Text</h3>
+        <textarea
+          rows="5"
+          value={resume}
+          onChange={(e)=>setResume(e.target.value)}
+          style={inputStyle}
+        />
 
-      {/* FILE OPTION */}
-      <h3>OR Upload Resume PDF</h3>
-      <input
-        type="file"
-        accept=".pdf"
-        onChange={(e)=>setResumeFile(e.target.files[0])}
-      />
+        <h3>OR Upload Resume PDF</h3>
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={(e)=>setResumeFile(e.target.files[0])}
+          style={{marginBottom:"20px"}}
+        />
 
-      <hr/>
+        <h3>🧾 Job Description</h3>
+        <textarea
+          rows="4"
+          value={jobDesc}
+          onChange={(e)=>setJobDesc(e.target.value)}
+          style={inputStyle}
+        />
 
-      <h3>Job Description</h3>
-      <textarea
-        rows="4"
-        value={jobDesc}
-        onChange={(e)=>setJobDesc(e.target.value)}
-        style={{width:"100%"}}
-      />
+        <button style={buttonStyle} onClick={handleSubmit}>
+          🔍 Parse Resume
+        </button>
 
-      <br/><br/>
-
-      <button onClick={handleSubmit}>Parse Resume</button>
-
-      {result && (
-        <div style={{marginTop:"20px"}}>
-          <h3>Result</h3>
-          <p>Skills: {result.skills_found.join(", ")}</p>
-          <p>Match %: {result.match_percentage}</p>
-        </div>
-      )}
+        {result && (
+          <div style={{
+            marginTop:"25px",
+            padding:"15px",
+            background:"#f7fafc",
+            borderRadius:"10px"
+          }}>
+            <h3>Result</h3>
+            <p><b>Skills:</b> {result.skills_found.join(", ")}</p>
+            <p><b>Match %:</b> {result.match_percentage}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
