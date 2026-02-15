@@ -11,7 +11,9 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "pdfjs-dist": "^2.16.105"
+
   },
   "scripts": {
     "start": "react-scripts start",
